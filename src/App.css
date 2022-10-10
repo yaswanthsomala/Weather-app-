@@ -1,13 +1,15 @@
 .app {
-  background-color: white;
+  background-color: #030303 !important;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+}
+.container{
+  background-color: #030303;
 }
 .weatherBg {
-  background: url(https://www.awxcdn.com/adc-assets/images/hero/4/1440x450.jpg) 50% no-repeat,linear-gradient(#878787,#ebebeb);
+  background: url(https://free4kwallpapers.com/uploads/originals/2015/07/16/nice-beach-suning-weather-hd-wallapaper.jpg) 50% no-repeat,linear-gradient(#878787,#ebebeb);
   height: 50vh;
   display: flex;
   align-items: center;
@@ -20,29 +22,34 @@
 }
 
 .weather-icon {
+  margin: auto;
   width: 100px;
   height: 100px;
 }
 .weather-city {
+  text-align: center;
   font-size: 25px;
+  color:#fff;
 }
 .weather-temp {
+  text-align: center;
   font-size: 35px;
   font-weight: 700;
+  color:#fff;
 }
 .primary-info {
   display: flex;
   align-items: center;
   justify-content: center;
+  color:#fff;
 }
 .weather-info{
   justify-content: center;
+  color:#fff;
 }
 .min-max {
   padding: 10px 10px;
   font-size: 20px;
+  color:#fff;
 }
 
-.ml-60 {
-  margin-left: 60px;
-}

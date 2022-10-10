@@ -20,15 +20,13 @@ const Forecast = ({ data, forecastTiles, getIcon, getDayInfo, getInfo }) => {
       </div>
       <div className="row">
         {forecastTiles.map((item, i) => (
-          <>
-            <div className="col ml-60">
-              <div key={i}>
-                <img src={getIcon(item)} alt="" />
-                {getDayInfo(item)}
-              </div>
-              <div>{getInfo(item)}</div>
+          <div className="col">
+            <div key={i} className="text-center" style={{ color: "#fff" }}>
+              <img src={getIcon(item)} alt="" />
+              {getDayInfo(item)}
             </div>
-          </>
+            <div>{getInfo(item)}</div>
+          </div>
         ))}
       </div>
     </div>

@@ -8,12 +8,13 @@ import { Json } from "./frJson";
 import Forecast from "./components/ForeCast";
 import CitySelector from "./components/CitySelector";
 
+import loader from "./Spinner.gif";
+
 const App = () => {
   const apiKey = "114b1c822d3b4540a2d6ccd02edd1f9e";
   const [weatherData, setWeatherData] = useState([]);
   const [forecastData, setForecastData] = useState([]);
-  const [lat, setLat] = useState(null);
-  const [lon, setLon] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
   const [cities, setCities] = useState([]);
 
@@ -41,29 +42,31 @@ const App = () => {
   };
 
   // get weather details for selected city
-  const getWeatherDetails = (formData) => {
+  const getWeatherDetails = async (formData) => {
+    let lat = "";
+    let lon = "";
     if (!formData) return;
-    const getUrl = `https://api.openweathermap.org/data/2.5/weather?q=${formData}&appid=${apiKey}`;
-    axios
-      .get(getUrl)
+    setLoading(true);
+
+    const getUrl1 = `https://api.openweathermap.org/data/2.5/weather?q=${formData}&appid=${apiKey}`;
+    await axios
+      .get(getUrl1)
       .then((res) => {
         setWeatherData(res.data);
-        setLat(res.data.coord.lat);
-        setLon(res.data.coord.lat);
+        lat = res.data.coord.lat;
+        lon = res.data.coord.lat;
       })
       .catch((err) => console.log("err", err));
-    getForecastDetails();
-  };
 
-  // get forecast details
-  const getForecastDetails = () => {
-    const getUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+    // if (!lon || !lat) return;
+    const getUrl2 = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
     axios
-      .get(getUrl)
+      .get(getUrl2)
       .then((res) => {
         setForecastData(res.data?.list);
       })
       .catch((err) => console.log("err", err));
+    setTimeout(() => setLoading(false), 2000);
   };
 
   // Filters the data by date and returns an Object containing a list of 3-day forecast.
@@ -110,12 +113,12 @@ const App = () => {
     );
 
     return (
-      <div className="weather-info">
+      <div className="weather-info text-center">
         <div className="min-max">
           <strong>{`${(minMax.max - 273.15).toFixed(2)}°C`}</strong> /{" "}
           {`${(minMax.min - 273.15).toFixed(2)}°C`}
         </div>
-        <div className="more-info">{`Avg. Humidity: ${avgHumdity}%`}</div>
+        <div>{`Avg. Humidity: ${avgHumdity}%`}</div>
       </div>
     );
   };
@@ -131,17 +134,37 @@ const App = () => {
   // this ensures that we are showing only 3-days of forecast.
   const forecastTiles = tiles.length > 3 ? tiles.slice(0, 3) : tiles;
 
+  // const loading = setTimeout(() => isLoading, 2000);
   return (
     <div className="app">
       <div className="col-md-12">
         <CitySelector cities={cities} onChange={onChange} />
-        <Forecast
-          data={weatherData}
-          forecastTiles={forecastTiles}
-          getIcon={_getIcon}
-          getDayInfo={_getDayInfo}
-          getInfo={_getInfo}
-        />
+        <div
+          style={{
+            backgroundColor: "black",
+            height: "50vh",
+          }}
+        >
+          {isLoading ? (
+            <div
+              style={{
+                position: "absolute",
+                top: "70vh",
+                left: "50%",
+              }}
+            >
+              <img src={`${loader}`} alt="" />
+            </div>
+          ) : (
+            <Forecast
+              data={weatherData}
+              forecastTiles={forecastTiles}
+              getIcon={_getIcon}
+              getDayInfo={_getDayInfo}
+              getInfo={_getInfo}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
