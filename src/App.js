@@ -59,7 +59,7 @@ const App = () => {
       })
       .catch((err) => console.log("err", err));
 
-    // if (!lon || !lat) return;
+    if (!lon || !lat) return;
     const getUrl2 = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
     axios
       .get(getUrl2)
