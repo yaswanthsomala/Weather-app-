@@ -80,13 +80,13 @@ const App = () => {
   // Returns week of the day
   const _getDayInfo = (data) => {
     const daysOfWeek = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
     return daysOfWeek[new Date(data?.[0]?.dt * 1000).getDay()];
   };
