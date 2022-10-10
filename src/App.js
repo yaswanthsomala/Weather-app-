@@ -34,6 +34,7 @@ const App = () => {
   // render the cities data in dropdown
   useEffect(() => {
     onSetCityData();
+    getWeatherDetails(Json[0].nm);
   }, []);
 
   // On select city

@@ -12,6 +12,7 @@ const CitySelector = ({ cities, onChange }) => {
           closeMenuOnSelect={true}
           hideSelectedOptions={true}
           name="color"
+          value={cities[0]}
           options={cities}
           className="basic-single"
           placeholder="Select City"
