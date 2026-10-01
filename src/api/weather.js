@@ -1,30 +1,87 @@
 import axios from "axios";
 
-// Set in .env.local (see .env.example). Never commit a real key.
-const API_KEY = process.env.REACT_APP_OWM_API_KEY;
+// The key comes from the browser (entered in the app) or, failing that, from
+// REACT_APP_OWM_API_KEY in .env.local. Never commit a real key.
+const ENV_API_KEY = process.env.REACT_APP_OWM_API_KEY;
+const KEY_STORAGE = "weather-app:api-key";
 
-const MISSING_KEY_MESSAGE =
-  "No OpenWeather API key configured. Set REACT_APP_OWM_API_KEY in .env.local and restart the dev server.";
+export const getApiKey = () => {
+  try {
+    return localStorage.getItem(KEY_STORAGE) || ENV_API_KEY || "";
+  } catch {
+    return ENV_API_KEY || "";
+  }
+};
+
+export const hasStoredApiKey = () => {
+  try {
+    return Boolean(localStorage.getItem(KEY_STORAGE));
+  } catch {
+    return false;
+  }
+};
+
+export const saveApiKey = (key) => {
+  try {
+    localStorage.setItem(KEY_STORAGE, key.trim());
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const clearApiKey = () => {
+  try {
+    localStorage.removeItem(KEY_STORAGE);
+  } catch {
+    // Nothing stored.
+  }
+};
+
+// Errors the UI handles by asking for a key instead of offering a retry.
+export const API_KEY_MISSING = "API_KEY_MISSING";
+export const API_KEY_INVALID = "API_KEY_INVALID";
+
+const keyError = (code, message) => Object.assign(new Error(message), { code });
 
 const weatherClient = axios.create({
   baseURL: "https://api.openweathermap.org/data/2.5",
-  params: { appid: API_KEY, units: "metric" },
+  params: { units: "metric" },
   timeout: 10000,
 });
 
 const geoClient = axios.create({
   baseURL: "https://api.openweathermap.org/geo/1.0",
-  params: { appid: API_KEY },
   timeout: 8000,
 });
 
-const requireKey = () => {
-  if (!API_KEY) throw new Error(MISSING_KEY_MESSAGE);
-};
+// Attach the current key to every request and translate a 401 into a key error.
+[weatherClient, geoClient].forEach((client) => {
+  client.interceptors.request.use((config) => {
+    const appid = config.params?.appid || getApiKey();
+    if (!appid) {
+      throw keyError(API_KEY_MISSING, "Add an OpenWeather API key to load weather.");
+    }
+    config.params = { ...config.params, appid };
+    return config;
+  });
+  client.interceptors.response.use(undefined, (err) => {
+    if (err.response?.status === 401) {
+      throw keyError(
+        API_KEY_INVALID,
+        "OpenWeather rejected the API key. New keys can take up to 2 hours to activate."
+      );
+    }
+    throw err;
+  });
+});
+
+// Checks a key with one cheap request before it is saved.
+export const validateApiKey = (key) =>
+  weatherClient.get("/weather", { params: { lat: 0, lon: 0, appid: key.trim() } });
 
 // Fetches current conditions and the 5-day / 3-hour forecast in parallel.
 export const fetchWeather = async ({ lat, lon }) => {
-  requireKey();
   const params = { lat, lon };
   const [current, forecast] = await Promise.all([
     weatherClient.get("/weather", { params }),
@@ -36,7 +93,6 @@ export const fetchWeather = async ({ lat, lon }) => {
 // Worldwide city search. Accepts "London", "London, GB" or
 // "Springfield, IL, US" style queries.
 export const searchPlaces = async (query) => {
-  requireKey();
   const { data } = await geoClient.get("/direct", {
     params: { q: query, limit: 8 },
   });

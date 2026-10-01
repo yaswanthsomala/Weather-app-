@@ -10,15 +10,17 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Setup
 
-The app reads its [OpenWeather](https://openweathermap.org/api) API key from an
-environment variable. Copy `.env.example` to `.env.local` (gitignored) and fill
-in your key. The same key is used for weather and city search:
+The app needs a free [OpenWeather](https://home.openweathermap.org/api_keys)
+API key, used for both weather and city search. Provide it either way:
 
-```
-cp .env.example .env.local
-```
+- **In the app:** on first run the app asks for a key, checks it and saves it
+  in your browser (`localStorage`). Use the "API key" link in the footer to
+  change or remove it.
+- **At build time:** copy `.env.example` to `.env.local` (gitignored), set
+  `REACT_APP_OWM_API_KEY`, and restart `npm start`. A key saved in the browser
+  takes precedence.
 
-Restart `npm start` after changing it.
+New OpenWeather keys can take up to two hours to activate.
 
 ## Available Scripts
 

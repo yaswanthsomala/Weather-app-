@@ -8,6 +8,7 @@ import WeatherDetails from "./components/WeatherDetails";
 import HourlyForecast from "./components/HourlyForecast";
 import DailyForecast from "./components/DailyForecast";
 import { ErrorState, LoadingSkeleton } from "./components/StatusViews";
+import ApiKeyForm from "./components/ApiKeyForm";
 
 import { useWeather } from "./hooks/useWeather";
 import { useGeolocation } from "./hooks/useGeolocation";
@@ -46,12 +47,18 @@ const App = () => {
   const [unit, setUnit] = useState(prefs.unit);
   const [recents, setRecents] = useState(prefs.recents);
   const [notice, setNotice] = useState(null);
+  const [editingKey, setEditingKey] = useState(false);
 
   const placeRef = useRef(place);
   placeRef.current = place;
 
   const { locate, locating } = useGeolocation();
-  const { data, loading, error, retry } = useWeather(place);
+  const { data, loading, error, keyError, retry } = useWeather(place);
+
+  const onKeySaved = () => {
+    setEditingKey(false);
+    retry();
+  };
 
   const detectLocation = useCallback(async () => {
     try {
@@ -159,7 +166,14 @@ const App = () => {
           </div>
         )}
 
-        {error && !loading ? (
+        {editingKey ? (
+          <ApiKeyForm
+            onSaved={onKeySaved}
+            onCancel={() => setEditingKey(false)}
+          />
+        ) : keyError && !loading ? (
+          <ApiKeyForm message={error} onSaved={onKeySaved} />
+        ) : error && !loading ? (
           <ErrorState message={error} onRetry={retry} />
         ) : showSkeleton ? (
           <LoadingSkeleton />
@@ -178,6 +192,14 @@ const App = () => {
         <a href="https://openweathermap.org/" target="_blank" rel="noreferrer">
           OpenWeather
         </a>
+        {" · "}
+        <button
+          type="button"
+          className="link-button"
+          onClick={() => setEditingKey(true)}
+        >
+          API key
+        </button>
       </footer>
     </div>
   );
