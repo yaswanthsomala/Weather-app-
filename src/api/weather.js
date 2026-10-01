@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // The key comes from the browser (entered in the app) or, failing that, from
-// REACT_APP_OWM_API_KEY in .env.local. Never commit a real key.
+// REACT_APP_OWM_API_KEY in .env. Never commit a real key.
 const ENV_API_KEY = process.env.REACT_APP_OWM_API_KEY;
 const KEY_STORAGE = "weather-app:api-key";
 

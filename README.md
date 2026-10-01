@@ -16,7 +16,7 @@ API key, used for both weather and city search. Provide it either way:
 - **In the app:** on first run the app asks for a key, checks it and saves it
   in your browser (`localStorage`). Use the "API key" link in the footer to
   change or remove it.
-- **At build time:** copy `.env.example` to `.env.local` (gitignored), set
+- **At build time:** copy `.env.example` to `.env` (gitignored), set
   `REACT_APP_OWM_API_KEY`, and restart `npm start`. A key saved in the browser
   takes precedence.
 
