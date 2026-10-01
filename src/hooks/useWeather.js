@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchWeather } from "../api/weather";
 
-export const useWeather = (city) => {
+export const useWeather = (place) => {
   const [state, setState] = useState({
     data: null,
     loading: false,
@@ -9,12 +9,15 @@ export const useWeather = (city) => {
   });
   const [attempt, setAttempt] = useState(0);
 
+  const lat = place?.lat;
+  const lon = place?.lon;
+
   useEffect(() => {
-    if (!city) return;
+    if (lat == null || lon == null) return;
     let cancelled = false;
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
-    fetchWeather(city)
+    fetchWeather({ lat, lon })
       .then((data) => {
         if (!cancelled) setState({ data, loading: false, error: null });
       })
@@ -32,7 +35,7 @@ export const useWeather = (city) => {
     return () => {
       cancelled = true;
     };
-  }, [city, attempt]);
+  }, [lat, lon, attempt]);
 
   const retry = useCallback(() => setAttempt((n) => n + 1), []);
 

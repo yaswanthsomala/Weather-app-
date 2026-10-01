@@ -7,18 +7,27 @@ import {
   formatTime,
   toCityDate,
 } from "../utils/format";
+import { countryFlag, placeSubtitle } from "../utils/places";
 
-const CurrentWeather = ({ data, unit }) => {
-  const { name, sys, main, weather, dt, timezone } = data;
+const CurrentWeather = ({ data, place, unit }) => {
+  const { main, weather, dt, timezone } = data;
+  const subtitle = placeSubtitle(place);
   const condition = weather[0];
 
   return (
     <section className="card current" aria-labelledby="current-city">
       <div className="current__meta">
+        {place.source === "geo" && (
+          <span className="current__badge">📍 Your location</span>
+        )}
         <h2 id="current-city" className="current__city">
-          {name}
-          {sys?.country && <span className="current__country">{sys.country}</span>}
+          {place.name}
         </h2>
+        {subtitle && (
+          <p className="current__region">
+            <span aria-hidden="true">{countryFlag(place.country)}</span> {subtitle}
+          </p>
+        )}
         <p className="current__date">
           {formatFullDate(toCityDate(dt, timezone))} · Updated{" "}
           {formatTime(toCityDate(dt, timezone))}

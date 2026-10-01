@@ -156,13 +156,6 @@
   align-items: baseline;
   gap: 10px;
 }
-.current__country {
-  font-size: 13px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.2);
-}
 .current__date {
   margin-top: 4px;
   color: var(--muted);
@@ -437,6 +430,119 @@
     transition: none;
   }
   .skeleton::after {
+    animation: none;
+  }
+}
+
+/* ---------- Search, location and notices ---------- */
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 400px;
+}
+.search .city-selector {
+  max-width: none;
+  flex: 1;
+  min-width: 0;
+}
+.icon-button {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.icon-button:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+.icon-button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.icon-button:disabled {
+  cursor: progress;
+}
+.icon-button.is-busy svg {
+  animation: pulse 1s ease-in-out infinite;
+}
+@keyframes pulse {
+  50% { opacity: 0.35; }
+}
+
+.place-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.place-option__flag {
+  font-size: 20px;
+  line-height: 1;
+}
+.place-option__name {
+  display: block;
+  font-weight: 600;
+}
+.place-option__sub {
+  display: block;
+  font-size: 13px;
+  color: #6b7385;
+}
+
+.current__badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  margin-bottom: 8px;
+}
+.current__region {
+  margin-top: 2px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border-radius: 14px;
+  background: rgba(255, 196, 0, 0.18);
+  border: 1px solid rgba(255, 214, 102, 0.45);
+  font-size: 15px;
+}
+.notice__close {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+@media (max-width: 560px) {
+  .search {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon-button.is-busy svg {
     animation: none;
   }
 }

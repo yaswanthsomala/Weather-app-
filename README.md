@@ -2,11 +2,17 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Features
+
+- Search any city in the world (OpenWeather Geocoding API), with recent searches.
+- Detects your location on first visit. If location access is denied, falls back to your last searched city or London.
+- Current conditions, a 24-hour strip and a 5-day forecast, with a °C/°F toggle.
+
 ## Setup
 
 The app reads its [OpenWeather](https://openweathermap.org/api) API key from an
 environment variable. Copy `.env.example` to `.env.local` (gitignored) and fill
-in your key:
+in your key. The same key is used for weather and city search:
 
 ```
 cp .env.example .env.local
