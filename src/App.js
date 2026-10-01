@@ -47,7 +47,6 @@ const App = () => {
   const [unit, setUnit] = useState(prefs.unit);
   const [recents, setRecents] = useState(prefs.recents);
   const [notice, setNotice] = useState(null);
-  const [editingKey, setEditingKey] = useState(false);
 
   const placeRef = useRef(place);
   placeRef.current = place;
@@ -55,10 +54,6 @@ const App = () => {
   const { locate, locating } = useGeolocation();
   const { data, loading, error, keyError, retry } = useWeather(place);
 
-  const onKeySaved = () => {
-    setEditingKey(false);
-    retry();
-  };
 
   const detectLocation = useCallback(async () => {
     try {
@@ -166,13 +161,8 @@ const App = () => {
           </div>
         )}
 
-        {editingKey ? (
-          <ApiKeyForm
-            onSaved={onKeySaved}
-            onCancel={() => setEditingKey(false)}
-          />
-        ) : keyError && !loading ? (
-          <ApiKeyForm message={error} onSaved={onKeySaved} />
+        {keyError && !loading ? (
+          <ApiKeyForm message={error} onSaved={retry} />
         ) : error && !loading ? (
           <ErrorState message={error} onRetry={retry} />
         ) : showSkeleton ? (
@@ -187,20 +177,6 @@ const App = () => {
         ) : null}
       </main>
 
-      <footer className="footer">
-        Data from{" "}
-        <a href="https://openweathermap.org/" target="_blank" rel="noreferrer">
-          OpenWeather
-        </a>
-        {" · "}
-        <button
-          type="button"
-          className="link-button"
-          onClick={() => setEditingKey(true)}
-        >
-          API key
-        </button>
-      </footer>
     </div>
   );
 };

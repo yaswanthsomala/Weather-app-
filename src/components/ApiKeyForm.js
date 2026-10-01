@@ -7,7 +7,7 @@ import {
   validateApiKey,
 } from "../api/weather";
 
-const ApiKeyForm = ({ message, onSaved, onCancel }) => {
+const ApiKeyForm = ({ message, onSaved }) => {
   const [value, setValue] = useState("");
   const [visible, setVisible] = useState(false);
   const [checking, setChecking] = useState(false);
@@ -112,11 +112,6 @@ const ApiKeyForm = ({ message, onSaved, onCancel }) => {
         {canForce && (
           <button type="button" className="button button--ghost" onClick={store}>
             Save anyway
-          </button>
-        )}
-        {onCancel && (
-          <button type="button" className="button button--ghost" onClick={onCancel}>
-            Cancel
           </button>
         )}
         {stored && (
