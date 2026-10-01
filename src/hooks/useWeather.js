@@ -22,6 +22,7 @@ export const useWeather = (city) => {
         if (cancelled) return;
         const message =
           err.response?.data?.message ||
+          (!err.request && err.message) ||
           (err.code === "ECONNABORTED"
             ? "The request timed out."
             : "Couldn't reach the weather service.");

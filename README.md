@@ -2,6 +2,18 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Setup
+
+The app reads its [OpenWeather](https://openweathermap.org/api) API key from an
+environment variable. Copy `.env.example` to `.env.local` (gitignored) and fill
+in your key:
+
+```
+cp .env.example .env.local
+```
+
+Restart `npm start` after changing it.
+
 ## Available Scripts
 
 In the project directory, you can run:
